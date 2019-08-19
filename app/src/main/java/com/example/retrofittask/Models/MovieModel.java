@@ -12,11 +12,25 @@ public class MovieModel {
     @Expose
     private String image;
 
+    @SerializedName("rating")
+    private double rating;
+
+    @SerializedName("releaseYear")
+    private int releaseYear;
+
     public String getTitle() {
         return title;
     }
 
     public String getImage() {
         return image;
+    }
+
+    public double getRating() {
+        return rating;
+    }
+
+    public int getReleaseYear() {
+        return releaseYear;
     }
 }

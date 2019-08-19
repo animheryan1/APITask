@@ -5,11 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Activities.MainActivity">
-
-    <ImageView
+    <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/first_image"/>
-
-
+        android:id="@+id/movies_list"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,17 +1,23 @@
 package com.example.retrofittask.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 
 import com.example.retrofittask.Interfaces.UserService;
 import com.example.retrofittask.Models.MovieModel;
 import com.example.retrofittask.R;
+import com.example.retrofittask.RecyclerViewAdapter;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -21,14 +27,17 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
-    private ImageView firstImage;
+    private RecyclerView recyclerView;
+    private RecyclerView.LayoutManager layoutManager;
+    private RecyclerViewAdapter recyclerViewAdapter;
+    private List<MovieModel> movieModels;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         setRetrofitCall();
-        firstImage = findViewById(R.id.first_image);
     }
 
     private void setRetrofitCall() {
@@ -47,9 +56,9 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(Call<List<MovieModel>> call, Response<List<MovieModel>> response) {
                 if (response.body() != null) {
                     if (response.isSuccessful()) {
-                        List<MovieModel> movieModels = response.body();
-                        Toast.makeText(MainActivity.this, movieModels.get(0).getTitle(), Toast.LENGTH_SHORT).show();
-                        Picasso.get().load(movieModels.get(0).getImage()).into(firstImage);
+                        movieModels = new ArrayList<>();
+                        movieModels.addAll(response.body());
+                        setRecyclerView();
                     } else {
                         Toast.makeText(MainActivity.this, "Fail", Toast.LENGTH_SHORT).show();
                     }
@@ -61,5 +70,13 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, "Fail 2", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+    private void setRecyclerView(){
+        recyclerView = findViewById(R.id.movies_list);
+        recyclerView.setHasFixedSize(true);
+        layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerViewAdapter = new RecyclerViewAdapter(movieModels);
+        recyclerView.setAdapter(recyclerViewAdapter);
     }
 }
